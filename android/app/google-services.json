@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "138616243531",
+    "project_id": "mensagens-biblicas-c5254",
+    "storage_bucket": "mensagens-biblicas-c5254.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138616243531:android:f39626db1276a7c0afd4ce",
+        "android_client_info": {
+          "package_name": "com.tooapps.mensagensbiblicas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPFfZB42G92zFUqlcvp43CXN9FzwfDL4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
