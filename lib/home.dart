@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'category_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,33 +9,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late BannerAd _bannerAd;
-  bool _isBannerAdReady = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _bannerAd = BannerAd(
-      adUnitId: 'pub-1040656265404217', // Substitua pelo seu ID de unidade de anúncio
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Failed to load a banner ad: ${error.message}');
-        },
-      ),
-    )..load();
-  }
-
   @override
   void dispose() {
-    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -45,10 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return DefaultTabController(
       length: 9, // Atualize o comprimento do TabController
       child: Scaffold(
-      //  floatingActionButton: FloatingActionButton(
-        //  onPressed: () {},
-//child: const Icon(Icons.favorite),
-//),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.favorite),
+        ),
         appBar: AppBar(
           title: const Text('Mensagens Bíblicas'),
           bottom: const TabBar(
@@ -82,16 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 CategoryView(category: 'Provérbios'),
               ],
             ),
-            if (_isBannerAdReady)
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: AdWidget(ad: _bannerAd),
-                  width: _bannerAd.size.width.toDouble(),
-                  height: _bannerAd.size.height.toDouble(),
-                ),
-              ),
           ],
         ),
       ),
