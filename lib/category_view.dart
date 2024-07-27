@@ -1,66 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 import 'message_card.dart';
 
-class CategoryView extends StatelessWidget {
+class CategoryView extends StatefulWidget {
   final String category;
 
   const CategoryView({required this.category, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
+  _CategoryViewState createState() => _CategoryViewState();
+}
+
+class _CategoryViewState extends State<CategoryView> {
+  List<QueryDocumentSnapshot>? messages;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  Future<void> _loadMessages() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
           .collection('mensagens')
-          .where('category', isEqualTo: category)
-          .orderBy('timestamp',
-              descending: true) // Certifique-se de que o campo existe
-          .snapshots(),
-      builder: (context, snapshot) {
-        // Log de conexão
-        print('Connection State: ${snapshot.connectionState}');
+          .where('category', isEqualTo: widget.category)
+          .limit(50)
+          .get();
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+      final docs = snapshot.docs;
 
-        // Log de erro
-        if (snapshot.hasError) {
-          print('Error: ${snapshot.error}');
-          return Center(
-              child: Text('Erro ao carregar mensagens: ${snapshot.error}'));
-        }
+      // Log de documentos recebidos
+      print('Documents: ${docs.length}');
+      for (var doc in docs) {
+        print('Document ID: ${doc.id}, Data: ${doc.data()}');
+      }
 
-        // Log de dados
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          print('No Data');
-          return Center(
-            child: Text(
-              'Nada Encontrado',
-              style: TextStyle(fontSize: 16),
-            ),
-          );
-        }
+      // Embaralha a lista de mensagens
+      docs.shuffle(Random());
 
-        final messages = snapshot.data!.docs;
+      setState(() {
+        messages = docs;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Erro: $e');
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar mensagens: $e')),
+      );
+    }
+  }
 
-        // Log de documentos recebidos
-        print('Documents: ${messages.length}');
-        for (var doc in messages) {
-          print('Document ID: ${doc.id}, Data: ${doc.data()}');
-        }
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
 
-        return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: messages.length,
-          itemBuilder: (context, index) {
-            final message = messages[index];
-            return MessageCard(
-              imageUrl:
-                  message['imageUrl'] ?? 'https://via.placeholder.com/600x400',
-              message: message['message'] ?? 'Mensagem não disponível',
-            );
-          },
+    if (messages == null || messages!.isEmpty) {
+      return Center(
+        child: Text(
+          'Nada Encontrado',
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemCount: messages!.length,
+      itemBuilder: (context, index) {
+        final message = messages![index];
+        return MessageCard(
+          imageUrl:
+              message['imageUrl'] ?? 'https://via.placeholder.com/600x400',
+          message: message['message'] ?? '',
         );
       },
     );
