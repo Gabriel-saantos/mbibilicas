@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/compartilhar.dart';
 import 'category_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,8 +21,13 @@ class _HomeScreenState extends State<HomeScreen> {
       length: 9, // Atualize o comprimento do TabController
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.favorite),
+          onPressed: () {
+           Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Compartilhar()),
+          );
+          },
+          child: const Icon(Icons.share_rounded),
         ),
         appBar: AppBar(
           title: const Text('Mensagens Bíblicas'),
