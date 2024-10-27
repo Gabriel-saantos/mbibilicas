@@ -7,6 +7,7 @@ buildscript {
     }
 
     dependencies {
+        classpath 'com.google.gms:google-services:4.3.15' // ou a versão mais recente
         classpath "com.android.tools.build:gradle:7.2.1" // ou a versão que você está usando
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // Outras dependências
@@ -54,6 +55,21 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('/home/user/myapp/my-release-key.jks') // Caminho para o arquivo de keystore
+            storePassword '1472580369' // Senha do keystore
+            keyAlias 'my-key-alias' // Alias da chave
+            keyPassword '1472580369' // Senha da chave
+        }
+        debug {
+            storeFile file('/home/user/myapp/my-release-key.jks') // Caminho para o arquivo de keystore
+            storePassword '1472580369' // Senha do keystore
+            keyAlias 'my-key-alias' // Alias da chave
+            keyPassword '1472580369' // Senha da chave
+        }
     }
 
     buildTypes {

@@ -8,93 +8,150 @@ class Compartilhar extends StatefulWidget {
   State<Compartilhar> createState() => _CompartilharState();
 }
 
-class _CompartilharState extends State<Compartilhar> {
+class _CompartilharState extends State<Compartilhar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _compartilharLink() {
+    _controller.forward();
     Share.share(
-        'Confira o aplicativo Mensagens Bíblicas: https://play.google.com/store/apps/details?id=com.seuapp.mensagensbiblicas');
+        'Confira o aplicativo Mensagens Bíblicas, baixe já: \n \n https://play.google.com/store/apps/details?id=com.tooapps.mensagensbiblicas');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Compartilhar Aplicativo'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'Compartilhar aplicativo',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 60,
-              backgroundImage: AssetImage(
-                  'assets/images/share_icon.png'), // Substitua pelo caminho da sua imagem
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Compartilhe o aplicativo Mensagens Bíblicas com seus amigos e familiares!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _compartilharLink,
-              icon: const Icon(Icons.share),
-              label: const Text(' COMPARTILHAR '),
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                textStyle: const TextStyle(fontSize: 16),
+      body: Stack(
+        children: [
+          // Imagem de fundo com opacidade
+          Opacity(
+            opacity: 0.3, // Controla a opacidade da imagem
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/background.jpeg"),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          // Conteúdo principal
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 18),
+                Image.asset(
+                  'images/logobg.png',
+                  width: 120,
+                  height: 120,
+                ),
+                const Text(
+                  'Mensagens Bíblicas',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Text(
+                  'Espalhe a palavra!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Compartilhe o aplicativo Mensagens Bíblicas com seus amigos e familiares.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Center(
+                  child: ScaleTransition(
+                    scale: _animation,
+                    child: ElevatedButton.icon(
+                      onPressed: _compartilharLink,
+                      icon: const Icon(
+                        Icons.share_rounded,
+                        color: Colors.pink,
+                      ),
+                      label: const Text(
+                        'COMPARTILHAR',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 24),
+                        textStyle: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        elevation: 5,
+                        shadowColor: Colors.black.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class TelaPrincipal extends StatelessWidget {
-  const TelaPrincipal({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mensagens Bíblicas'),
-      ),
-      body: Center(
-        child: const Text('Conteúdo principal aqui'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Compartilhar()),
-          );
-        },
-        child: const Icon(Icons.share_rounded),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mensagens Bíblicas',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const TelaPrincipal(),
     );
   }
 }

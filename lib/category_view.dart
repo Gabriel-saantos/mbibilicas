@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/messagecard/message.dart';
 import 'dart:math';
-import 'message_card.dart';
 
 class CategoryView extends StatefulWidget {
   final String category;
@@ -24,11 +24,22 @@ class _CategoryViewState extends State<CategoryView> {
 
   Future<void> _loadMessages() async {
     try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('mensagens')
-          .where('category', isEqualTo: widget.category)
-          .limit(50)
-          .get();
+      QuerySnapshot snapshot;
+
+      if (widget.category == 'Descobrir') {
+        // Puxar todas as mensagens sem filtrar por categoria
+        snapshot = await FirebaseFirestore.instance
+            .collection('mensagens')
+            .limit(50)
+            .get();
+      } else {
+        // Puxar mensagens baseadas na categoria
+        snapshot = await FirebaseFirestore.instance
+            .collection('mensagens')
+            .where('category', isEqualTo: widget.category)
+            .limit(50)
+            .get();
+      }
 
       final docs = snapshot.docs;
 
@@ -59,7 +70,9 @@ class _CategoryViewState extends State<CategoryView> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(
+        color: Colors.pink,
+      ));
     }
 
     if (messages == null || messages!.isEmpty) {
