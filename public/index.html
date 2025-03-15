@@ -5,26 +5,43 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mensagens Bíblicas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: url('https://images.unsplash.com/photo-1532762487806-ceca4f30263b?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmF6ZW5kYSUyMGRlJTIwcGFzdGFnZW18ZW58MHx8MHx8fDA%3D') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            color: rgba(0, 0, 0, 0.87);
+        }
+
+        /* Overlay para melhorar a leitura */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
 
         #container {
+            position: relative;
+            z-index: 2;
             background: rgba(255, 255, 255, 0.95);
-            max-width: 360px;
+            max-width: 380px;
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             text-align: center;
         }
 
@@ -32,67 +49,67 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            margin-bottom: 24px;
-            object-fit: cover;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 24px;
-            font-weight: 500;
+            font-size: 26px;
+            font-weight: 700;
             color: #333;
             margin-bottom: 16px;
         }
 
         p {
             font-size: 16px;
-            color: #666;
+            color: #555;
             line-height: 1.6;
             margin-bottom: 24px;
         }
 
         a {
             display: block;
-            background-color: #333;
-            color: #fff;
-            text-transform: uppercase;
-            text-decoration: none;
             padding: 14px 0;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 12px;
             letter-spacing: 1px;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-decoration: none;
+            text-transform: uppercase;
         }
 
-        a:hover {
-            background-color: #555;
+        .download {
+            background: #C2185B;
+            color: #fff;
+        }
+
+        .download:hover {
+            background: #9C144A;
         }
 
         .privacy {
             background: none;
             color: #666;
-            font-size: 12px;
-            text-decoration: none;
-            margin-top: 12px;
+            font-size: 14px;
         }
 
         .privacy:hover {
             text-decoration: underline;
-            background: none;
             color: #C2185B;
         }
     </style>
 </head>
 
 <body>
+    <div class="overlay"></div>
     <div id="container">
         <img src="https://play-lh.googleusercontent.com/YWpXBM8kcUudkHgAHv2OyWmMZzZCV4PYmrpXFAboMwPlus9kFtYKVwnSS-xA_uAhgqw=w240-h480-rw" alt="Logo Mensagens Bíblicas">
         <h1>Mensagens Bíblicas</h1>
         <p>Baixe nosso aplicativo e tenha acesso a mensagens inspiradoras sempre que precisar!</p>
-        <a href="https://play.google.com/store/apps/details?id=com.tooapps.mensagensbiblicas" target="_blank">Baixar na Play Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.tooapps.mensagensbiblicas" target="_blank" class="download">Baixar na Play Store</a>
         <a href="https://mensagens-biblicas-c5254.web.app/politicadeprivacidade.html" target="_blank" class="privacy">Política de Privacidade</a>
     </div>
 </body>
 
 </html>
-

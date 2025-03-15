@@ -38,7 +38,7 @@ class _CompartilharState extends State<Compartilhar>
   void _compartilharLink() {
     _controller.forward();
     Share.share(
-        'Confira o aplicativo Mensagens Bíblicas, baixe já: \n \n https://play.google.com/store/apps/details?id=com.tooapps.mensagensbiblicas');
+        'Confira o aplicativo Mensagens Bíblicas, onde você pode compartilhar mensagens bíblicas com seus amigos e familiares! Junte-se a nós no Mensagens Bíblicas, ✨ BAIXE JÁ!  \n \n https://play.google.com/store/apps/details?id=com.tooapps.mensagensbiblicas');
   }
 
   @override
@@ -51,12 +51,12 @@ class _CompartilharState extends State<Compartilhar>
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          'Compartilhar aplicativo',
+          'Compartilhar',
           style: TextStyle(
             color: Colors.white,
             fontSize: 22,
             fontFamily: 'Roboto',
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
         ),
         centerTitle: true,
@@ -67,7 +67,7 @@ class _CompartilharState extends State<Compartilhar>
           Opacity(
             opacity: 0.3, // Controla a opacidade da imagem
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("images/background.jpeg"),
                   fit: BoxFit.cover,
@@ -82,67 +82,71 @@ class _CompartilharState extends State<Compartilhar>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 18),
+                // Logo do aplicativo
                 Image.asset(
                   'images/logobg.png',
                   width: 120,
                   height: 120,
                 ),
+                const SizedBox(height: 24),
+                // Título principal
                 const Text(
                   'Mensagens Bíblicas',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontFamily: 'Roboto',
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 8),
+                // Subtítulo
                 const Text(
                   'Espalhe a palavra!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    fontSize: 18,
+                    color: Colors.white70,
                     fontFamily: 'Roboto',
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
+                // Descrição
                 const Text(
-                  'Compartilhe o aplicativo Mensagens Bíblicas com seus amigos e familiares.',
+                  'Compartilhe o aplicativo com seus amigos e familiares.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                    fontSize: 16,
+                    color: Colors.white70,
                     fontFamily: 'Roboto',
                   ),
                 ),
                 const SizedBox(height: 40),
+                // Botão de compartilhamento
                 Center(
                   child: ScaleTransition(
                     scale: _animation,
-                    child: ElevatedButton.icon(
+                    child: ElevatedButton(
                       onPressed: _compartilharLink,
-                      icon: const Icon(
-                        Icons.share_rounded,
-                        color: Colors.pink,
-                      ),
-                      label: const Text(
-                        'COMPARTILHAR',
-                        style: TextStyle(color: Colors.black),
-                      ),
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pinkAccent,
                         padding: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 24),
+                            vertical: 16, horizontal: 32),
                         textStyle: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Roboto',
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        elevation: 5,
-                        shadowColor: Colors.black.withOpacity(0.3),
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                      ),
+                      child: const Text(
+                        'COMPARTILHAR',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),

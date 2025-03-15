@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = "1.8.0" // ou qualquer outra versão que você prefira
+    ext.kotlin_version = "1.9.25" // ou qualquer outra versão que você prefira
 
     repositories {
         google()
@@ -24,8 +24,8 @@ plugins {
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader("UTF-8") { reader ->
-        localProperties.load(reader)
+    localPropertiesFile.withReader("UTF-8") { reader -> 
+        localProperties.load(reader) 
     }
 }
 
@@ -47,6 +47,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    // Adicione a configuração do Kotlin aqui para garantir a compatibilidade
+    kotlinOptions {
+        jvmTarget = "1.8" // Defina o JVM target para 1.8 (compatível com Java 1.8)
     }
 
     defaultConfig {

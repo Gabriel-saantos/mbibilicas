@@ -1,46 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:myapp/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
+
 class MessageCardLogic {
-  InterstitialAd? _interstitialAd;
-
-  // Solicita as permissões necessárias e retorna se foram concedidas
-  Future<bool> _requestPermissions() async {
-    if (Platform.isAndroid) {
-      final status = await Permission.storage.request();
-      return status.isGranted;
-    }
-    return true; // Para outras plataformas (iOS, Web), as permissões não são necessárias
-  }
-
   // Método para limpar todos os favoritos
   Future<void> clearFavorites() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('favorites');
-  }
-
-  // Carrega um anúncio intersticial
-  void loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId:
-          'ca-app-pub-1040656265404217/3100521307', // Substitua pelo seu ID de anúncio intersticial
-      request: const AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) {
-          _interstitialAd = ad;
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('InterstitialAd failed to load: $error');
-        },
-      ),
-    );
   }
 
   // Compartilha uma imagem a partir de uma URL e um texto
@@ -65,23 +37,14 @@ class MessageCardLogic {
     }
   }
 
-  // Exibe o anúncio intersticial e, após o fechamento, compartilha a imagem e o texto
+  // Exibe o anúncio intersticial antes do compartilhamento
   void showInterstitialAdAndShare(
       String imageUrl, String message, BuildContext context) {
-    if (_interstitialAd != null) {
-      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (ad) {
-          ad.dispose();
-          shareImageAndText(imageUrl, message, context);
-          loadInterstitialAd(); // Carrega outro anúncio após o fechamento
-        },
-        onAdFailedToShowFullScreenContent: (ad, error) {
-          print('Ad failed to show: $error');
-          ad.dispose();
-          shareImageAndText(imageUrl, message, context);
-        },
-      );
-      _interstitialAd!.show();
+    if (InterstitialAdManager.isAdLoaded()) {
+      InterstitialAdManager.showAd(() async {
+        await Future.delayed(const Duration(seconds: 2)); // Pequeno delay
+        shareImageAndText(imageUrl, message, context);
+      });
     } else {
       shareImageAndText(imageUrl, message, context);
     }

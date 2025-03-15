@@ -4,14 +4,6 @@
     <!-- Permissões para acesso à internet -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!-- Permissões de armazenamento para versões anteriores -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <!-- Permissões específicas para Android 13 (API nível 33) e superior -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-
     <application
         android:label="Mensagens Bíblicas"
         android:name="${applicationName}"
@@ -20,7 +12,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1040656265404217~1888855915"/>
+            android:value="ca-app-pub-1040656265404217~7784069360"/>
 
         <activity
             android:name=".MainActivity"

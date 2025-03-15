@@ -15,27 +15,33 @@
             -webkit-font-smoothing: antialiased;
         }
         #container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+           
         }
-        img {
-            width: 120px;
-            display: block;
-            margin: 0 auto 20px;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .header img {
+            width: 50px;
             border-radius: 20%;
         }
         h1 {
-            font-size: 28px;
-            text-align: center;
+            font-size: 25px;
             color: #D81B60;
             margin-bottom: 20px;
         }
         h2 {
-            font-size: 20px;
+            font-size: 22px;
             margin-bottom: 10px;
             color: #444;
         }
@@ -55,37 +61,58 @@
             text-align: center;
             margin-top: 20px;
             color: #888;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .contact-info img {
+            width: 100px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div id="container">
-        <img src="https://play-lh.googleusercontent.com/YWpXBM8kcUudkHgAHv2OyWmMZzZCV4PYmrpXFAboMwPlus9kFtYKVwnSS-xA_uAhgqw=w240-h480-rw" alt="Logo Mensagens Bíblicas">
-        <h1>Mensagens Bíblicas</h1>
+        <div class="header">
+            <img src="https://play-lh.googleusercontent.com/YWpXBM8kcUudkHgAHv2OyWmMZzZCV4PYmrpXFAboMwPlus9kFtYKVwnSS-xA_uAhgqw=w240-h480-rw" alt="Logo Mensagens Bíblicas">
+            <h1>Mensagens Bíblicas</h1>
+        </div>
         <h2>Política de Privacidade</h2>
-        <p><strong>Última atualização:</strong> 11/09/2024</p>
-        <p>No Mensagens Bíblicas, valorizamos a sua privacidade. Esta Política de Privacidade explica como tratamos as informações enquanto você usa nosso aplicativo.</p>
+        <p><strong>Última atualização:</strong> 15/02/2025</p>
+        <p>No <strong>Mensagens Bíblicas</strong>, a sua privacidade é nossa prioridade. Esta Política de Privacidade explica como tratamos as informações enquanto você usa nosso aplicativo.</p>
         
         <h2>1. Informações que Coletamos</h2>
-        <p><strong>Não Coletamos Informações Pessoais:</strong> Nosso aplicativo não coleta informações pessoais identificáveis. Não há funcionalidades de login, e não solicitamos dados do usuário.</p>
+        <p><strong>1.1 Nenhuma Informação Pessoal Coletada:</strong> Nosso aplicativo não coleta informações pessoais identificáveis. Não solicitamos nome, e-mail, telefone ou qualquer outro dado pessoal.</p>
+        <p><strong>1.2 Dados Técnicos:</strong> Algumas informações podem ser processadas automaticamente pelo dispositivo ou serviços de terceiros, como:</p>
+        <ul>
+            <li><strong>Dados de cache:</strong> Imagens podem ser armazenadas temporariamente para otimizar o desempenho.</li>
+            <li><strong>Relatórios de erro:</strong> Serviços como Google Play podem gerar relatórios anônimos de falhas no aplicativo.</li>
+        </ul>
         
         <h2>2. Uso do Armazenamento</h2>
-        <p>O aplicativo armazena em cache as imagens carregadas da internet para otimizar a experiência de navegação. Essas imagens são temporariamente salvas no dispositivo para exibição offline, mas não são baixadas diretamente nem armazenadas permanentemente.</p>
+        <p>Nosso aplicativo <strong>não baixa imagens permanentemente</strong>. As imagens são armazenadas temporariamente para exibição offline e podem ser removidas automaticamente pelo sistema.</p>
 
         <h2>3. Compartilhamento de Imagens</h2>
-        <p>As imagens em cache podem ser compartilhadas diretamente pelo usuário ao utilizar a funcionalidade de compartilhamento do aplicativo. No entanto, essas imagens permanecem no dispositivo e só são transmitidas a terceiros quando o usuário opta por compartilhá-las.</p>
+        <p>Os usuários podem compartilhar imagens diretamente do aplicativo, mas nenhuma imagem é enviada para nossos servidores. O compartilhamento ocorre entre o dispositivo do usuário e o aplicativo escolhido para essa ação.</p>
 
-        <h2>4. Segurança</h2>
-        <p>Embora não coletemos informações pessoais, tomamos medidas para garantir que o armazenamento local no seu dispositivo seja seguro e protegido.</p>
+        <h2>4. Publicidade</h2>
+        <p>Exibimos anúncios no aplicativo por meio de serviços como o Google AdMob, que pode utilizar identificadores anônimos para personalizar os anúncios. No entanto, nosso aplicativo <strong>não coleta nem compartilha informações pessoais</strong> para esse fim.</p>
 
-        <h2>5. Atualizações desta Política</h2>
-        <p>Podemos atualizar esta Política de Privacidade para refletir mudanças nas nossas práticas. A versão atualizada será publicada no aplicativo, e a data da última atualização será indicada no topo.</p>
+        <h2>5. Segurança</h2>
+        <p>Embora não coletemos informações pessoais, seguimos boas práticas para manter o armazenamento local seguro e protegido contra vulnerabilidades.</p>
 
-        <h2>6. Contato</h2>
-        <p>Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco através do e-mail: <a href="mailto:gabriel.santos.cruz.profissional@gmail.com">gabriel.santos.cruz.profissional@gmail.com</a>.</p>
+        <h2>6. Links para Sites Externos</h2>
+        <p>Nosso aplicativo pode conter links para sites de terceiros. Ao acessar esses sites, recomendamos que você revise suas políticas de privacidade, pois não temos controle sobre seus conteúdos e práticas.</p>
+
+        <h2>7. Atualizações desta Política</h2>
+        <p>Podemos atualizar esta Política de Privacidade periodicamente. Qualquer alteração será publicada no aplicativo, e a data da última atualização estará indicada no topo da página.</p>
+
+        <h2>8. Contato</h2>
+        <p>Se você tiver dúvidas, sugestões ou preocupações sobre esta Política de Privacidade, entre em contato conosco pelo e-mail: <a href="mailto:gabriel.santos.cruz.profissional@gmail.com">gabriel.santos.cruz.profissional@gmail.com</a>.</p>
 
         <div class="contact-info">
-            <p>&copy; 2024 Mensagens Bíblicas. Todos os direitos reservados.</p>
+            <p>&copy; 2025 Too apps. Todos os direitos reservados.</p>
+            <img src="https://i.pinimg.com/736x/6f/ca/35/6fca35bcaa6cc2ea7a420319d04e7a01.jpg" alt="Too apps">
         </div>
     </div>
 </body>

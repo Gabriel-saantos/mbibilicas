@@ -2,7 +2,7 @@ name: myapp
 description: "Mensagens biblicas"
 publish_to: 'none' 
 
-version: 1.6.8+8
+version: 2.3.0+17
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -16,22 +16,21 @@ dependencies:
   path_provider: ^2.1.3
   dio: ^5.5.0+1
   permission_handler: ^11.3.1
-  share_plus: ^9.0.0
-  flutter_native_splash: ^2.4.1
-  flutter_launcher_icons: ^0.13.1
-  file_picker: ^8.0.7
+  share_plus: ^10.1.2
+  file_picker: ^9.1.0
   google_mobile_ads: ^5.1.0
-  image_gallery_saver: ^2.0.3
-  gallery_saver: ^2.3.2
   shimmer: ^3.0.0
   transparent_image: ^2.0.1
   firebase_messaging: ^15.1.0
   shared_preferences: ^2.3.2
+  url_launcher: ^6.3.1
+  cached_network_image: ^3.4.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
@@ -41,14 +40,7 @@ flutter:
     - images/logobg.png
     - images/background.jpeg
     - images/logoapp.png
-
-
-flutter_native_splash:
-  color: "#ffffff" # Cor de fundo da splash screen
-  image: images/logo2.png
-  android: true
-  ios: true
-  web: true
+    - images/too.png
 
 
 flutter_launcher_icons:
