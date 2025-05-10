@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = "1.9.25" // ou qualquer outra versão que você prefira
+    ext.kotlin_version = "1.9.25"
 
     repositories {
         google()
@@ -7,17 +7,16 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.15' // ou a versão mais recente
-        classpath "com.android.tools.build:gradle:7.2.1" // ou a versão que você está usando
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath "com.android.tools.build:gradle:7.2.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // Outras dependências
     }
 }
 
 plugins {
     id "com.android.application"
-    id 'com.google.gms.google-services'
     id "kotlin-android"
+    id "com.google.gms.google-services"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -29,14 +28,13 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
-if (flutterVersionCode == null) {
-    flutterVersionCode = "1"
-}
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode") ?: "1"
+def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "1.0"
 
-def flutterVersionName = localProperties.getProperty("flutter.versionName")
-if (flutterVersionName == null) {
-    flutterVersionName = "1.0"
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -45,41 +43,39 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // Adicione a configuração do Kotlin aqui para garantir a compatibilidade
     kotlinOptions {
-        jvmTarget = "1.8" // Defina o JVM target para 1.8 (compatível com Java 1.8)
+        jvmTarget = "1.8"
     }
 
     defaultConfig {
-        applicationId = "com.tooapps.mensagensbiblicas"
+        applicationId "com.tooapps.mensagensbiblicas"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+
+        multiDexEnabled true
     }
 
     signingConfigs {
         release {
-            storeFile file('/home/user/myapp/my-release-key.jks') // Caminho para o arquivo de keystore
-            storePassword '1472580369' // Senha do keystore
-            keyAlias 'my-key-alias' // Alias da chave
-            keyPassword '1472580369' // Senha da chave
-        }
-        debug {
-            storeFile file('/home/user/myapp/my-release-key.jks') // Caminho para o arquivo de keystore
-            storePassword '1472580369' // Senha do keystore
-            keyAlias 'my-key-alias' // Alias da chave
-            keyPassword '1472580369' // Senha da chave
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -89,6 +85,8 @@ flutter {
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    // Outras dependências
 }
+
+apply plugin: 'com.google.gms.google-services' 

@@ -3,39 +3,43 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:myapp/firebase_options.dart';
-import 'package:myapp/splash.dart';
+import 'firebase_options.dart';
+import 'splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Tratamento global de erros
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    print('Erro Flutter: ${details.exceptionAsString()}');
+  };
 
-  MobileAds.instance.initialize();
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    MobileAds.instance.initialize();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  String? token = await messaging.getToken();
-  print("Token do dispositivo: $token");
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // Carrega anúncios de abertura e intersticial antes do app iniciar
-  await Future.wait([
-    AppOpenAdManager.loadAd(),
-    InterstitialAdManager.loadAd(),
-  ]);
+    final messaging = FirebaseMessaging.instance;
+    final token = await messaging.getToken();
+    print('Token do dispositivo: $token');
+  } catch (e) {
+    print('Erro durante inicialização: $e');
+  }
 
   runApp(const MyApp());
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Mensagem recebida em segundo plano: ${message.messageId}');
+  print('Mensagem em segundo plano: ${message.messageId}');
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -45,6 +49,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _loadThemePreference();
+    AppOpenAdManager.loadAd(); // Carrega anúncio de abertura após o init
+    InterstitialAdManager.loadAd();
   }
 
   Future<void> _loadThemePreference() async {
@@ -56,23 +62,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData lightTheme = ThemeData(
+    final theme = ThemeData(
       primarySwatch: Colors.pink,
-      brightness: Brightness.light,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    );
-
-    final ThemeData darkTheme = ThemeData(
-      primarySwatch: Colors.pink,
-      brightness: Brightness.dark,
+      brightness: _isDarkMode ? Brightness.dark : Brightness.light,
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mensagens Bíblicas',
-      theme: _isDarkMode ? darkTheme : lightTheme,
-      home: SplashScreen(),
+      theme: theme,
+      home: const SplashScreen(),
     );
   }
 }
@@ -82,7 +82,7 @@ class AppOpenAdManager {
   static AppOpenAd? _appOpenAd;
   static bool _isShowingAd = false;
 
-  static Future<void> loadAd() async {
+  static void loadAd() {
     if (_appOpenAd != null) return;
 
     AppOpenAd.load(
@@ -91,16 +91,16 @@ class AppOpenAdManager {
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
           _appOpenAd = ad;
-          _showAdIfAvailable();
         },
         onAdFailedToLoad: (error) {
           print('AppOpenAd falhou ao carregar: $error');
         },
       ),
+  //    orientation: AppOpenAd.orientationPortrait,
     );
   }
 
-  static void _showAdIfAvailable() {
+  static void showAdIfAvailable() {
     if (_appOpenAd == null || _isShowingAd) return;
 
     _isShowingAd = true;
@@ -109,10 +109,12 @@ class AppOpenAdManager {
       onAdDismissedFullScreenContent: (ad) {
         _appOpenAd = null;
         _isShowingAd = false;
+        loadAd();
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         _appOpenAd = null;
         _isShowingAd = false;
+        loadAd();
       },
     );
 
@@ -123,23 +125,18 @@ class AppOpenAdManager {
 class InterstitialAdManager {
   static InterstitialAd? _interstitialAd;
 
-  // Método para verificar se o anúncio foi carregado
-  static bool isAdLoaded() {
-    return _interstitialAd != null;
-  }
+  static bool isAdLoaded() => _interstitialAd != null;
 
-  static Future<void> loadAd() async {
+  static void loadAd() {
     InterstitialAd.load(
       adUnitId: 'ca-app-pub-1040656265404217/4925562610',
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) {
-          _interstitialAd = ad;
-        },
+        onAdLoaded: (ad) => _interstitialAd = ad,
         onAdFailedToLoad: (error) {
           print('InterstitialAd falhou ao carregar: $error');
           _interstitialAd = null;
-          Future.delayed(const Duration(seconds: 5), loadAd); // Recarrega
+          Future.delayed(const Duration(seconds: 5), loadAd);
         },
       ),
     );
@@ -148,19 +145,25 @@ class InterstitialAdManager {
   static void showAd(VoidCallback onAdClosed) {
     if (_interstitialAd == null) {
       print('Anúncio intersticial não carregado.');
+      onAdClosed();
       return;
     }
 
-    _interstitialAd!.show();
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
+        _interstitialAd = null;
         onAdClosed();
+        loadAd();
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         ad.dispose();
+        _interstitialAd = null;
         onAdClosed();
+        loadAd();
       },
     );
+
+    _interstitialAd!.show();
   }
 }
